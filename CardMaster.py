@@ -25,14 +25,14 @@ class CardGameGUI:
     def __init__(self, root):
         self.root = root
         self.root.title("双人卡牌游戏")
-        self.root.geometry("400x300")
+        self.root.geometry("500x400")
 
         self.player1_cards = {}
         self.player2_cards = {}
 
-        self.setup_start_screen()
+        self.setup_player1_screen()
 
-    def setup_start_screen(self):
+    def setup_player1_screen(self):
         self.clear_screen()
 
         tk.Label(self.root, text="玩家1，请选择四个不同的数字（1-15），且总和为30：").pack()
@@ -45,6 +45,29 @@ class CardGameGUI:
             entry.pack(side=tk.LEFT)
             self.player1_entries[card] = entry
 
+        tk.Button(self.root, text="确认", command=self.validate_player1_input).pack()
+
+    def validate_player1_input(self):
+        try:
+            # 获取玩家1的卡牌
+            for card, entry in self.player1_entries.items():
+                value = int(entry.get())
+                if value < 1 or value > 15:
+                    raise ValueError("数字必须在1到15之间。")
+                self.player1_cards[card] = value
+
+            # 验证选择
+            if not validate_selection(list(self.player1_cards.values())):
+                raise ValueError("玩家1的选择无效，请确保四个数字不重复且总和为30。")
+
+            # 进入玩家2的输入界面
+            self.setup_player2_screen()
+        except ValueError as e:
+            messagebox.showerror("输入错误", str(e))
+
+    def setup_player2_screen(self):
+        self.clear_screen()
+
         tk.Label(self.root, text="玩家2，请选择四个不同的数字（1-15），且总和为30：").pack()
         self.player2_entries = {}
         for card in ['E', 'F', 'G', 'H']:
@@ -55,21 +78,10 @@ class CardGameGUI:
             entry.pack(side=tk.LEFT)
             self.player2_entries[card] = entry
 
-        tk.Button(self.root, text="开始游戏", command=self.start_game).pack()
+        tk.Button(self.root, text="确认", command=self.validate_player2_input).pack()
 
-    def clear_screen(self):
-        for widget in self.root.winfo_children():
-            widget.destroy()
-
-    def start_game(self):
+    def validate_player2_input(self):
         try:
-            # 获取玩家1的卡牌
-            for card, entry in self.player1_entries.items():
-                value = int(entry.get())
-                if value < 1 or value > 15:
-                    raise ValueError("数字必须在1到15之间。")
-                self.player1_cards[card] = value
-
             # 获取玩家2的卡牌
             for card, entry in self.player2_entries.items():
                 value = int(entry.get())
@@ -78,8 +90,6 @@ class CardGameGUI:
                 self.player2_cards[card] = value
 
             # 验证选择
-            if not validate_selection(list(self.player1_cards.values())):
-                raise ValueError("玩家1的选择无效，请确保四个数字不重复且总和为30。")
             if not validate_selection(list(self.player2_cards.values())):
                 raise ValueError("玩家2的选择无效，请确保四个数字不重复且总和为30。")
 
@@ -91,6 +101,10 @@ class CardGameGUI:
             self.setup_game_screen()
         except ValueError as e:
             messagebox.showerror("输入错误", str(e))
+
+    def clear_screen(self):
+        for widget in self.root.winfo_children():
+            widget.destroy()
 
     def setup_game_screen(self):
         self.clear_screen()
@@ -110,13 +124,17 @@ class CardGameGUI:
 
         tk.Label(self.root, text=f"{player1.name}，请选择你的卡牌：").pack()
         self.card1_var = tk.StringVar()
+        frame = tk.Frame(self.root)
+        frame.pack()
         for card in player1.cards.keys():
-            tk.Radiobutton(self.root, text=card, variable=self.card1_var, value=card).pack()
+            tk.Radiobutton(frame, text=card, variable=self.card1_var, value=card).pack(side=tk.LEFT)
 
-        tk.Label(self.root, text=f"{player2.name}，请选择对方的卡牌：").pack()
+        tk.Label(self.root, text=f"{player1.name}，请选择对方的卡牌：").pack()
         self.card2_var = tk.StringVar()
+        frame = tk.Frame(self.root)
+        frame.pack()
         for card in player2.cards.keys():
-            tk.Radiobutton(self.root, text=card, variable=self.card2_var, value=card).pack()
+            tk.Radiobutton(frame, text=card, variable=self.card2_var, value=card).pack(side=tk.LEFT)
 
         tk.Button(self.root, text="确认比较", command=lambda: self.show_card_comparison(player1, player2)).pack()
 
@@ -143,16 +161,20 @@ class CardGameGUI:
         tk.Label(self.root, text=f"{player1.name}，请选择你的两张卡牌：").pack()
         self.card1_var = tk.StringVar()
         self.card2_var = tk.StringVar()
+        frame = tk.Frame(self.root)
+        frame.pack()
         for card in player1.cards.keys():
-            tk.Radiobutton(self.root, text=card, variable=self.card1_var, value=card).pack()
-            tk.Radiobutton(self.root, text=card, variable=self.card2_var, value=card).pack()
+            tk.Radiobutton(frame, text=card, variable=self.card1_var, value=card).pack(side=tk.LEFT)
+            tk.Radiobutton(frame, text=card, variable=self.card2_var, value=card).pack(side=tk.LEFT)
 
-        tk.Label(self.root, text=f"{player2.name}，请选择对方的两张卡牌：").pack()
+        tk.Label(self.root, text=f"{player1.name}，请选择对方的两张卡牌：").pack()
         self.card3_var = tk.StringVar()
         self.card4_var = tk.StringVar()
+        frame = tk.Frame(self.root)
+        frame.pack()
         for card in player2.cards.keys():
-            tk.Radiobutton(self.root, text=card, variable=self.card3_var, value=card).pack()
-            tk.Radiobutton(self.root, text=card, variable=self.card4_var, value=card).pack()
+            tk.Radiobutton(frame, text=card, variable=self.card3_var, value=card).pack(side=tk.LEFT)
+            tk.Radiobutton(frame, text=card, variable=self.card4_var, value=card).pack(side=tk.LEFT)
 
         tk.Button(self.root, text="确认比较", command=lambda: self.show_sum_comparison(player1, player2)).pack()
 
