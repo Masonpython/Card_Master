@@ -1,5 +1,9 @@
 import tkinter as tk
 from tkinter import messagebox
+import sys
+
+def quit_game():
+    sys.exit()
 
 class Player:
     def __init__(self, name, cards):
@@ -115,6 +119,7 @@ class CardGameGUI:
         tk.Button(self.root, text="玩家1：比较单张卡牌", command=lambda: self.compare_cards(self.player1, self.player2)).pack()
         tk.Button(self.root, text="玩家1：比较两张卡牌之和", command=lambda: self.compare_sums(self.player1, self.player2)).pack()
 
+        tk.Button(self.root, text="退出游戏", command=lambda: quit_game()).pack()
     def setup_game_screen_p2(self):
         self.clear_screen()
         
@@ -123,6 +128,7 @@ class CardGameGUI:
         tk.Button(self.root, text="玩家2：比较单张卡牌", command=lambda: self.compare_cards(self.player2, self.player1)).pack()
         tk.Button(self.root, text="玩家2：比较两张卡牌之和", command=lambda: self.compare_sums(self.player2, self.player1)).pack()
 
+        tk.Button(self.root, text="退出游戏", command=lambda: quit_game()).pack()
     def compare_cards(self, player1, player2):
         self.clear_screen()
 
@@ -216,7 +222,10 @@ class CardGameGUI:
                 self.setup_game_screen_p1()
                 self.flag = 1
 
-if __name__ == "__main__":
+def main():
     root = tk.Tk()
     app = CardGameGUI(root)
     root.mainloop()
+
+if __name__ == "__main__":
+    main()
