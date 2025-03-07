@@ -23,6 +23,7 @@ def validate_selection(cards):
 
 class CardGameGUI:
     def __init__(self, root):
+        self.flag = 1
         self.root = root
         self.root.title("双人卡牌游戏")
         self.root.geometry("500x400")
@@ -98,7 +99,7 @@ class CardGameGUI:
             self.player2 = Player("玩家2", self.player2_cards)
 
             # 进入游戏主界面
-            self.setup_game_screen()
+            self.setup_game_screen_p1()
         except ValueError as e:
             messagebox.showerror("输入错误", str(e))
 
@@ -106,16 +107,19 @@ class CardGameGUI:
         for widget in self.root.winfo_children():
             widget.destroy()
 
-    def setup_game_screen(self):
+    def setup_game_screen_p1(self):
         self.clear_screen()
 
         tk.Label(self.root, text="游戏进行中").pack()
 
-        # 玩家1的操作
         tk.Button(self.root, text="玩家1：比较单张卡牌", command=lambda: self.compare_cards(self.player1, self.player2)).pack()
         tk.Button(self.root, text="玩家1：比较两张卡牌之和", command=lambda: self.compare_sums(self.player1, self.player2)).pack()
 
-        # 玩家2的操作
+    def setup_game_screen_p2(self):
+        self.clear_screen()
+        
+        tk.Label(self.root, text="游戏进行中").pack()
+
         tk.Button(self.root, text="玩家2：比较单张卡牌", command=lambda: self.compare_cards(self.player2, self.player1)).pack()
         tk.Button(self.root, text="玩家2：比较两张卡牌之和", command=lambda: self.compare_sums(self.player2, self.player1)).pack()
 
@@ -146,14 +150,22 @@ class CardGameGUI:
         value2 = player2.get_card_value(card2)
 
         if value1 > value2:
-            result = f"{player1.name}的{card1}大于{player2.name}的{card2}"
+            result = f"{card1}大于{card2}"
         elif value1 < value2:
-            result = f"{player1.name}的{card1}小于{player2.name}的{card2}"
+            result = f"{card1}小于{card2}"
         else:
-            result = f"{player1.name}的{card1}等于{player2.name}的{card2}"
+            result = f"{card1}等于{card2}"
 
         messagebox.showinfo("比较结果", result)
-        self.setup_game_screen()
+        
+        match self.flag:
+            case 1:
+                self.setup_game_screen_p2()
+                self.flag = 2
+            case 2:
+                self.setup_game_screen_p1()
+                self.flag = 1
+
 
     def compare_sums(self, player1, player2):
         self.clear_screen()
@@ -188,14 +200,21 @@ class CardGameGUI:
         sum2 = player2.get_sum(card3, card4)
 
         if sum1 > sum2:
-            result = f"{player1.name}的{card1}和{card2}之和大于{player2.name}的{card3}和{card4}之和"
+            result = f"{card1}和{card2}之和大于{card3}和{card4}之和"
         elif sum1 < sum2:
-            result = f"{player1.name}的{card1}和{card2}之和小于{player2.name}的{card3}和{card4}之和"
+            result = f"{card1}和{card2}之和小于{card3}和{card4}之和"
         else:
-            result = f"{player1.name}的{card1}和{card2}之和等于{player2.name}的{card3}和{card4}之和"
+            result = f"{card1}和{card2}之和等于{card3}和{card4}之和"
 
         messagebox.showinfo("比较结果", result)
-        self.setup_game_screen()
+        
+        match self.flag:
+            case 1:
+                self.setup_game_screen_p2()
+                self.flag = 2
+            case 2:
+                self.setup_game_screen_p1()
+                self.flag = 1
 
 if __name__ == "__main__":
     root = tk.Tk()
