@@ -31,11 +31,7 @@ This is a two-player card game implemented using Python and Tkinter. Each player
    git clone https://github.com/yourusername/card_master.git
    cd card_master
    ```
-2. Install the required dependencies:
-   ```sh
-   pip install -r requirements.txt
-   ```
-
+   
 ## Usage
 Run the game using the following command:
 ```sh
