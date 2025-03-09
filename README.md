@@ -6,7 +6,7 @@ This is a two-player card game implemented using Python and Tkinter. Each player
 ## Game Rules
 1. Each player selects four different numbers from 1 to 15.
 2. The selected numbers must be unique and their sum must equal 30.
-3. The selected numbers are represented by A, B, C, D for Player 1 and 甲, 乙, 丙, 丁 for Player 2.
+3. The selected numbers are represented by A, B, C, D for Player 1 and E, F, G, H for Player 2.
 4. Players take turns asking questions to compare either a single card or the sum of two cards with the opponent's cards.
 5. The program provides the result of the comparison.
 
@@ -32,12 +32,6 @@ This is a two-player card game implemented using Python and Tkinter. Each player
    cd card_master
    ```
    
-## Usage
-Run the game using the following command:
-```sh
-python CardMaster.py
-```
-
 ## Contributing
 1. Fork the repository.
 2. Create a new branch (`git checkout -b feature-branch`).
