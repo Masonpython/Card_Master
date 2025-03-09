@@ -1,4 +1,3 @@
-<!-- filepath: c:\Users\Hiake\Documents\Program\Python\card_master\.gitignore -->
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
