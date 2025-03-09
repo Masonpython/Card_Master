@@ -44,7 +44,7 @@ class CardGameGUI:
             "Game Rules:\n"
             "1. Each player selects four different numbers from 1 to 15.\n"
             "2. The selected numbers must be unique and their sum must equal 30.\n"
-            "3. The selected numbers are represented by A, B, C, D for Player 1 and 甲, 乙, 丙, 丁 for Player 2.\n"
+            "3. The selected numbers are represented by A, B, C, D for Player 1 and E, F, G, H for Player 2.\n"
             "4. Players take turns asking questions to compare either a single card or the sum of two cards with the opponent's cards.\n"
             "5. The program should provide the result of the comparison."
         )
@@ -94,7 +94,7 @@ class CardGameGUI:
 
         tk.Label(self.root, text="Player 2, please select four different numbers (1-15) that sum to 30:").pack()
         self.player2_entries = {}
-        for card in ['A', 'B', 'C', 'D']:
+        for card in ['E', 'F', 'G', 'H']:
             frame = tk.Frame(self.root)
             frame.pack()
             tk.Label(frame, text=f"{card}:").pack(side=tk.LEFT)
@@ -224,7 +224,7 @@ class CardGameGUI:
 
         tk.Button(self.root, text="Confirm Comparison", command=lambda: self.show_sum_comparison(player1, player2)).pack()
 
-    def validate_chosen_cards(self, player):
+    def validate_chosen_cards(self):
         card1 = self.card1_var.get()
         card2 = self.card2_var.get()
         card3 = self.card3_var.get()
@@ -240,7 +240,7 @@ class CardGameGUI:
         card3 = self.card3_var.get()
         card4 = self.card4_var.get()
 
-        if not self.validate_chosen_cards(player1):
+        if not self.validate_chosen_cards():
             messagebox.showerror("Selection Error", "Ensure the selected cards are not duplicated.")
             return
 
@@ -266,7 +266,7 @@ class CardGameGUI:
 
 def main():
     root = tk.Tk()
-    app = CardGameGUI(root)
+    CardGameGUI(root)
     root.mainloop()
 
 if __name__ == "__main__":
